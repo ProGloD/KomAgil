@@ -1,8 +1,11 @@
 import tableModel from "./tableModel.js";
 import tableView from "./tableView.js";
+import search from "./searchController.js";
 
 const form = document.querySelector("form");
 const tableViewer = document.querySelector(".table-view");
+
+search.render();
 
 form.addEventListener("submit", function(e) {
   e.preventDefault();
