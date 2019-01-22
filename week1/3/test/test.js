@@ -6,17 +6,19 @@ describe('Counter', function() {
 
 
   // Write tests here
-  afterEach(function() {
+  beforeEach(function() {
     counter.reset();
   });
 
   it("increase", function() {
+    assert.strictEqual(counter.getCount(), 0);
     counter.increase();
-    assert.equal(counter.getCount(), 1);
+    assert.strictEqual(counter.getCount(), 1);
   });
 
   it("decrease", function() {
+    assert.strictEqual(counter.getCount(), 0);
     counter.decrease();
-    assert.equal(counter.getCount(), -1);
+    assert.strictEqual(counter.getCount(), -1);
   });
 });

@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "@babel/register": "^7.0.0",
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha --require @babel/register"
+  }
+}
