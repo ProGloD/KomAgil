@@ -1,32 +1,42 @@
 import tableModel from "./tableModel.js";
 import tableView from "./tableView.js";
+import searchView from "./searchView.js";
 
 export default {
   render: function() {
-    const form = document.querySelector(".search");
     const tableViewer = document.querySelector(".table-view");
 
-    form.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const search = document.querySelector(".search__input");
+    // Återställa till default
+    tableViewer.innerHTML = "";
 
-      // Återställa till default
-      tableViewer.innerHTML = "";
+    // Lägg till tabell
+    tableViewer.appendChild(
+      tableView.render(tableModel.peoples)
+    );
 
-      if (!search.value) {
-        tableViewer.appendChild(
-          tableView.render(tableModel.peoples)
-        );
-      } else {
-        const sorted = tableModel.peoples.filter(function(people) {
-          return people.name === search.value;
-        });
+    let search = document.querySelectorAll("select");
 
-        tableViewer.appendChild(
-          tableView.render(sorted)
-        );
-      }
+    for (let el of search) {
+      let id = el.dataset.id;
+      el.innerHTML = "";
+      searchView.render(tableModel.getData(id), el);
+      el.addEventListener("change", () => {
+        tableViewer.innerHTML = "";
 
-    });
+        if (el.value === "--No filter--") {
+          tableViewer.appendChild(
+            tableView.render(tableModel.peoples)
+          );
+        } else {
+          const sorted = tableModel.peoples.filter(function(people) {
+            return people[id].toLowerCase() === el.value.toLowerCase();
+          });
+
+          tableViewer.appendChild(
+            tableView.render(sorted)
+          );
+        }
+      });
+    }
   }
 };

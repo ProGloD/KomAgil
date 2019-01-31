@@ -16,14 +16,7 @@ form.addEventListener("submit", function(e) {
   // Skapa människa
   tableModel.addPeople(name.value, surname.value, age.value);
 
-  // Återställa till default
-  tableViewer.innerHTML = "";
-
-  // Lägg till tabell
-  tableViewer.appendChild(
-    tableView.render(tableModel.peoples)
-  );
-
+  search.render();
   name.value = "";
   surname.value = "";
   age.value = "";

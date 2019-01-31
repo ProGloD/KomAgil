@@ -10,6 +10,17 @@
         age: age
       });
     },
+    getData: function(id) {
+      let sorted = [];
+
+      for (let people of this.peoples) {
+        if (!sorted.includes(people[id])) {
+          sorted.push(people[id]);
+        }
+      }
+
+      return sorted
+    }
   };
 
   var tableRow = {
@@ -84,33 +95,58 @@
     }
   };
 
+  var searchView = {
+    render: function(peoples, el) {
+      let defaultOption = document.createElement("option");
+      defaultOption.textContent = "--No filter--";
+
+      el.appendChild(defaultOption);
+
+      for (let people of peoples) {
+        let option = document.createElement("option");
+        option.style.textTransform = "capitalize";
+        option.textContent = people;
+        el.appendChild(option);
+      }
+    }
+  };
+
   var search = {
     render: function() {
-      const form = document.querySelector(".search");
       const tableViewer = document.querySelector(".table-view");
 
-      form.addEventListener("submit", function(e) {
-        e.preventDefault();
-        const search = document.querySelector(".search__input");
+      // Återställa till default
+      tableViewer.innerHTML = "";
 
-        // Återställa till default
-        tableViewer.innerHTML = "";
+      // Lägg till tabell
+      tableViewer.appendChild(
+        tableView.render(tableModel.peoples)
+      );
 
-        if (!search.value) {
-          tableViewer.appendChild(
-            tableView.render(tableModel.peoples)
-          );
-        } else {
-          const sorted = tableModel.peoples.filter(function(people) {
-            return people.name === search.value;
-          });
+      let search = document.querySelectorAll("select");
 
-          tableViewer.appendChild(
-            tableView.render(sorted)
-          );
-        }
+      for (let el of search) {
+        let id = el.dataset.id;
+        el.innerHTML = "";
+        searchView.render(tableModel.getData(id), el);
+        el.addEventListener("change", () => {
+          tableViewer.innerHTML = "";
 
-      });
+          if (el.value === "--No filter--") {
+            tableViewer.appendChild(
+              tableView.render(tableModel.peoples)
+            );
+          } else {
+            const sorted = tableModel.peoples.filter(function(people) {
+              return people[id].toLowerCase() === el.value.toLowerCase();
+            });
+
+            tableViewer.appendChild(
+              tableView.render(sorted)
+            );
+          }
+        });
+      }
     }
   };
 
@@ -128,14 +164,7 @@
     // Skapa människa
     tableModel.addPeople(name.value, surname.value, age.value);
 
-    // Återställa till default
-    tableViewer.innerHTML = "";
-
-    // Lägg till tabell
-    tableViewer.appendChild(
-      tableView.render(tableModel.peoples)
-    );
-
+    search.render();
     name.value = "";
     surname.value = "";
     age.value = "";

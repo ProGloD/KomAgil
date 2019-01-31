@@ -7,4 +7,15 @@ export default {
       age: age
     });
   },
+  getData: function(id) {
+    let sorted = [];
+
+    for (let people of this.peoples) {
+      if (!sorted.includes(people[id])) {
+        sorted.push(people[id]);
+      }
+    }
+
+    return sorted
+  }
 };
